@@ -54,8 +54,7 @@ public class P {
 
 						for (File f : g.get()) {
 
-							// print(f);
-							delete(f); // deleta arquivos
+							delete(f); // delete file
 
 						}
 
@@ -66,20 +65,26 @@ public class P {
 			} else {
 
 				newFile = new File(P.rename(fileEntry));
+				
+				if (newFile.exists()) // file exist
+					continue;
 
 				try {
 
-					if (!newFile.exists())
-						if (fileEntry.renameTo(newFile)) {
-							System.out.println("Renaming...: " + fileEntry.getName() + " to " + newFile.getName() + " in " + currDir.getName());
+					if (!newFile.exists()) { // file not exist
+							currDir = new File(fileEntry.getAbsoluteFile().getParentFile().getAbsolutePath());
 							newFile.setWritable(true);
-
+							
+							if(fileEntry.renameTo(newFile))
+								System.out.println("File renamed...: " + fileEntry.getName() + " to " + newFile.getName() + " in " + currDir.getName());
+							
+							else{
+					            System.out.println("File already exists.");
+					          }
+							
 							countRen++;
-						} else {
-							System.err.println("Fail...: " + fileEntry.getAbsolutePath());
-						}
-					else
-						delete(fileEntry);
+						
+					}
 
 				} catch (Exception e) {
 					countErr++;
@@ -129,20 +134,25 @@ public class P {
 
 	public static String rename(File file) {
 
-		if (file.exists() & file.getName().contains("(2016_04_13 16_25_18 UTC)")) {
-			String path = file.getAbsoluteFile().getParentFile().getAbsolutePath();
+		//if (file.exists() & file.getName().contains("(2016_04_13 16_25_18 UTC)")) {
 
 			String nameFileOri = file.getName();
+			
+			if(nameFileOri.contains("(") && nameFileOri.contains("UTC")) {
+			
+				int indexIni = nameFileOri.indexOf("(");
+				int indexDot = nameFileOri.lastIndexOf(".");
+				if (indexDot != -1) {
 
-			int indexIni = nameFileOri.indexOf("(");
-			int indexDot = nameFileOri.lastIndexOf(".");
-			if (indexDot != -1) {
-
-				String sfinal = nameFileOri.substring(indexDot);
-				return path + "\\" + nameFileOri.substring(0, indexIni).trim() + sfinal;
+					String sfinal = nameFileOri.substring(indexDot);
+					String path = file.getAbsoluteFile().getParentFile().getAbsolutePath();
+					return path + "\\" + nameFileOri.substring(0, indexIni).trim() + sfinal;
+				}
 			}
 
-		}
+			
+
+		//}
 
 		return file.getPath();
 	}
