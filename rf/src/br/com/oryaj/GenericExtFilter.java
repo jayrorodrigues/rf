@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class GenericExtFilter implements FilenameFilter {
+public class GenericExtFilter {
 
 	private List<File> files;
 
@@ -16,19 +16,19 @@ public class GenericExtFilter implements FilenameFilter {
 		this.dir = dir;
 	}
 
-	@Override
+	
 	public boolean accept(File dir, String name) {
 		
 		if(dir != null && name != null){
 			
-			map(dir, name);
+			//map(dir, name);
 			
 			if(!files.isEmpty())
 				return true;
 			
 		} else {
 			
-			map(this.dir, null);
+			//map(this.dir, null);
 			if(!files.isEmpty())
 				return true;
 		}
@@ -36,20 +36,33 @@ public class GenericExtFilter implements FilenameFilter {
 		return false;
 	}
 	
-	private void map(File dir, String name){
+	private void get(File dir){
 		files = new ArrayList<File>();
 		
 		for(File f : dir.listFiles()){
 			
-			if (f.isFile()) {
-				
-				if (Pattern.compile(C1.get()).matcher(f.getName()).find() || Pattern.compile(C2.get()).matcher(f.getName()).find()) {
+			if ((f.isFile() && f.getName().contains("UTC"))) {
 					
-					files.add(new File(f.getAbsolutePath()));
+				if(C0.get(identifica(f))){
 					
+					//System.out.println(C0.get());
+					files.add(f);
 				}
+					
+				
 			}
 		}
+	}
+	
+	public String identifica(File file) {
+
+		String nameFileOri = file.getName();
+		int i =nameFileOri.indexOf(")"); 
+		
+		if(nameFileOri.contains("UTC"))
+			nameFileOri = nameFileOri.substring(nameFileOri.indexOf(" "), i+1);
+		
+		return nameFileOri;
 	}
 
 	/**
@@ -58,6 +71,9 @@ public class GenericExtFilter implements FilenameFilter {
 	 */
 	public List<File> get() {
 
+		if(files == null)
+			get(dir);
+		
 		return files;
 	}
 

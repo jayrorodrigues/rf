@@ -17,6 +17,11 @@ public class P {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		if (args.length > 0) {
@@ -34,6 +39,11 @@ public class P {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param folder
+	 */
 	public static void listFilesForFolder(File folder) {
 
 		File newFile = null;
