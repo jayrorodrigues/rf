@@ -148,7 +148,7 @@ public class FixBackupFail {
 			
 			try {
 				Files.move(Paths.get(file.getAbsolutePath()), Paths.get(copy.getAbsolutePath()),
-						StandardCopyOption.REPLACE_EXISTING);
+						StandardCopyOption.ATOMIC_MOVE);
 				System.gc();
 				
 				countRen++;
@@ -169,7 +169,7 @@ public class FixBackupFail {
 		
 		try {
 			Files.move(Paths.get(file.getAbsolutePath()), Paths.get(copy.getAbsolutePath()),
-					StandardCopyOption.REPLACE_EXISTING);
+					StandardCopyOption.ATOMIC_MOVE);
 			System.gc();
 			
 			countRen++;
